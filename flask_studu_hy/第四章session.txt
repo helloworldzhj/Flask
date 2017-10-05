@@ -1,0 +1,60 @@
+###cookie：
+1.'cookie'出现的原因：在网站中，http请求是无状态的。也就是说即使第一次和服务器连接后并且登陆成功后，第二次请求服务器依然不能知道当前请求的是哪个用户，cookie的出现就是为了解决这个问题，第一次登陆后服务器返回一些数据（cookie）给浏览器，然后浏览器保存到本地。当用户第二次发送请求的时候，就会自动把上次请求存储的cookie数据自动的携带给服务器，服务器通过浏览器携带的数据就能判断当前用户是哪个了。
+2.如果服务器返回了'cookie'给浏览器，那么浏览器下次再请求相同的服务器的时候，就会自动的把'cookie'发送给服务器，这个过程用户不用管。
+3.'cookie'是保存在浏览器中的，相对的是浏览器
+
+###session：
+1.'session'介绍：session和cookie的作用有点类似，都是为了存储用户的相关信息。不同的是，cookie是存储在本地浏览器，而session存储在服务器，这样更加安全，不容易被窃取，但存储在服务器也有一定的弊端，就是会占用一定的资源，如果发展至今，这点空间还是有的。
+2.使用'session'的好处：
+    *敏感数据不是直接发送回浏览器，而是发送回一个'session_id',服务器将'session_id'和敏感数据做一个映射存储在'session'(服务器)更加安全
+    *'session'可以设置过期时间，也可以从另一方面，保证用户安全。
+
+
+###flask中的session工作机制：
+1.flask中的session机制是：把敏感数据通过加密后放入session'中然后再把session存放到cookie中，下次请求的时候，再从浏览器发送过来的cookie中读取session，然后再从session'中读取铭感数据，并进行解密，获取最终的用户数据
+2.flask的这种session机制，可以节省服务器资源，把所有信息存储到客户端（浏览器）。
+3.安全是相对的，把session放到cookie中，经过加密，也是比较安全的，可放心使用
+
+###操作session：
+1.flask的操作方式：
+    *使用'session'需要从'flask'中导入'session'，以后所有和'session'相关的操作都是通过这个变量来的
+    *使用'session'需要设置'SECRET_KEY',用来作为加密使用的。并且这个''SECRET_KEY'如果每次启动服务器以后都变化的话，那么值钱的'session'就不能再通过当前这个''SECRET_KEY进行解密了
+    *操作'session'的时候，跟操作字典一样
+    *添加session ：session['username']
+    *删除：session.pop('username')或者del session['username']
+    *清除所有session：'session.clear()'
+    *获取session：'session.get('username')'
+2.设置session的过期时间：
+    *如果没有指定session的过期时间，那么浏览器关闭session就过期了
+    *如果设置session的permanent的属性为True，那么过期时间就是31天
+    *可以通过app.config设置PERMANENT_SESSION_LIFETIME来更改过期时间，这个值的数据类型是datetime。timedelay类型。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
